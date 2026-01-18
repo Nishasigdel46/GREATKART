@@ -6,7 +6,12 @@
 <!-- ========================= SECTION PAGETOP ========================= -->
 <section class="section-pagetop bg">
 <div class="container">
+   {% if 'search' in request.path %} 
+    <h2 class="title-page">Search Result</h2>
+   {% else %}
     <h2 class="title-page">Our Store</h2>
+    {% endif %}
+
 </div>
 </section>
 <!-- ========================= SECTION INTRO END// ========================= -->
@@ -52,19 +57,19 @@
             <div class="card-body">
                 <label class="checkbox-btn">
                     <input type="checkbox">
-                    <span class="btn btn-light">XS</span>
+                    <span class="btn btn-light">S</span>
                 </label>
                 <label class="checkbox-btn">
                     <input type="checkbox">
-                    <span class="btn btn-light">SM</span>
+                    <span class="btn btn-light">M</span>
                 </label>
                 <label class="checkbox-btn">
                     <input type="checkbox">
-                    <span class="btn btn-light">LG</span>
+                    <span class="btn btn-light">L</span>
                 </label>
                 <label class="checkbox-btn">
                     <input type="checkbox">
-                    <span class="btn btn-light">XXL</span>
+                    <span class="btn btn-light">XL</span>
                 </label>
             </div>
         </div>
@@ -119,6 +124,7 @@
 </header>
 
 <div class="row">
+    {% if products %}
     {% for product in products %}
     <div class="col-md-4">
         <figure class="card card-product-grid">
@@ -135,12 +141,57 @@
                         <span class="price">${{ product.price }}</span>
                     </div>
                 </div>
-                <!-- Add to Cart removed -->
+                <a href="{{ product.get_url }}"class="btn btn-primary btn-block mt-2">View Details</a>
             </figcaption>
         </figure>
     </div>
     {% endfor %}
+    {% else %}
+    <div>
+    <h2>No result found. Please try again.</h2>
+    </div>
+    {% endif %}
 </div>
+
+<nav class="mt-4" aria-label="Page navigation">
+{% if products.has_other_pages %}
+  <ul class="pagination">
+
+    {% if products.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ products.previous_page_number }}">Previous</a>
+      </li>
+    {% else %}
+      <li class="page-item disabled">
+        <span class="page-link">Previous</span>
+      </li>
+    {% endif %}
+
+    {% for i in products.paginator.page_range %}
+      {% if products.number == i %}
+        <li class="page-item active">
+          <span class="page-link">{{ i }}</span>
+        </li>
+      {% else %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+        </li>
+      {% endif %}
+    {% endfor %}
+
+    {% if products.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ products.next_page_number }}">Next</a>
+      </li>
+    {% else %}
+      <li class="page-item disabled">
+        <span class="page-link">Next</span>
+      </li>
+    {% endif %}
+
+  </ul>
+{% endif %}
+</nav>
 
     </main>
 </div>
