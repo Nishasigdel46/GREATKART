@@ -6,7 +6,7 @@
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTop4" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-  <div class="collapse navbar-collapse" id="navbarTop4">
+  <!-- <div class="collapse navbar-collapse" id="navbarTop4">
     <ul class="navbar-nav mr-auto">
         <li class="nav-item dropdown">
             <a href="#" class="nav-link">English</a>
@@ -19,7 +19,7 @@
         <li><a href="#" class="nav-link"><i class="fa fa-envelope"></i> Email</a></li>
         <li><a href="#" class="nav-link"><i class="fa fa-phone"></i> Call us</a></li>
     </ul>
-  </div>
+  </div> -->
 </div>
 </nav>
 
@@ -59,7 +59,7 @@
 
             <!-- Search form -->
             <div class="col-lg col-md col-sm col">
-                <form action="{% url 'search' %}" class="search" method='Keyword'>
+                <form action="{% url 'search' %}" class="search" method='GET'>
                     <div class="input-group w-100">
                         <input type="text" class="form-control" style="width:60%;" placeholder="Search" name="keyword">
                         <div class="input-group-append">

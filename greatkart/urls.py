@@ -11,6 +11,9 @@ urlpatterns = [
     path('store/', include('store.urls')),  # <-- include your store app
     path('cart/', include('carts.urls')),
     path('accounts/', include('accounts.urls')),
+
+    #orders
+     path('orders/', include('orders.urls')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

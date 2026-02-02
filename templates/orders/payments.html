@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+<section class="section-content padding-y bg">
+<div class="container">
+
+<h4 class="text-center mb-10">Review Your Order and Make Payment</h4>
+<div class="row">
+
+    <!-- CART ITEMS -->
+    <aside class="col-lg-8">
+        <div class="card">
+            <div class="card">
+  <h5 class="card-header">Billing Address</h5>
+  <div class="card-body">
+    <p class="card-text mb-0">{{order.full_name}}</p>
+    <p class="card-text mb-0">{{order.address_line_1}}, {{order.address_line_2}}</p>
+    <p class="card-text mb-0">{{order.city}}, {{order.state}}</p>
+    <p class="card-text mb-0">{{order.country}}</p>
+    <p class="card-text mb-0">{{order.email}}</p>
+    <p class="card-text mb-0">{{order.phone}}</p>
+    {% if order.order_note %}
+    <b>Order Note: </b> {{order.order_note}}
+    {% endif %}
+</div>
+
+</div>
+            </div>
+
+<div class="card">
+            <div class="card">
+  <h5 class="card-header">Payment Method</h5>
+<div class="card-body">
+    <p class="card-text"><strong>Payment Method: </strong>
+    {% if order.payment %}
+        {% if order.payment.payment_method == 'esewa' %}
+            eSewa
+        {% elif order.payment.payment_method == 'khalti' %}
+            Khalti
+        {% elif order.payment.payment_method == 'cod' %}
+            Cash on Delivery
+        {% else %}
+            Other
+        {% endif %}
+    {% else %}
+        Pending
+    {% endif %}
+</p>
+
+</div>
+</div>
+            </div>
+
+<div class="card">
+            <div class="card">
+  <h5 class="card-header">Review Products</h5>
+  <div class="card-body">
+    <table class="table table-borderless table-shopping-cart">
+                <thead class="text-muted">
+                    <tr class="small text-uppercase">
+                        <th>Product</th>
+                        <th width="120">Quantity</th>
+                        <th width="120">Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                {% for item in cart_items %}
+                <tr>
+<!-- PRODUCT -->
+<td>
+    <figure class="itemside align-items-center">
+        <div class="aside">
+            {% if item.product.images %}
+                <img src="{{ item.product.images.url }}" class="img-sm">
+            {% else %}
+                <img src="{% static 'images/default.png' %}" class="img-sm">
+            {% endif %}
+        </div>
+
+        <figcaption class="info">
+            <a href="{{ item.product.get_url }}" class="title text-dark">
+                {{ item.product.product_name }}
+            </a>
+
+            <p class="text-muted small mb-0">
+    {% if item.variations.all %}
+        <span>
+            <strong>Color</strong> :
+            {% for v in item.variations.all %}
+                {% if v.variation_category == 'color' %}
+                    {{ v.variation_value|capfirst }}
+                {% endif %}
+            {% endfor %}
+        </span>
+        <br>
+        <span>
+            <strong>Size</strong> :
+            {% for v in item.variations.all %}
+                {% if v.variation_category == 'size' %}
+                    {{ v.variation_value|capfirst }}
+                {% endif %}
+            {% endfor %}
+        </span>
+    {% endif %}
+</p>
+
+        </figcaption>
+    </figure>
+</td>
+
+<!-- QUANTITY -->
+<td class="align-middle">
+    <label>{{ item.quantity }}</label>
+</td>
+    <td>
+        <div class="price-wrap">
+             <var class="price">NPR {{ item.sub_total }}</var>
+                <small class="text-muted">NPR {{ item.product.price }} each</small>
+        </div>
+    </td>
+
+                </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+</div>
+            </div>
+    </aside>
+
+    <!-- SUMMARY -->
+    <aside class="col-lg-4">
+        <div class="card">
+            <div class="card-body">
+                <dl class="dlist-align">
+                    <dt>Total price:</dt>
+                    <dd class="text-right">NPR {{ total }}</dd>
+                </dl>
+                <dl class="dlist-align">
+                    <dt>Tax:</dt>
+                    <dd class="text-right">NPR {{ tax }}</dd>
+                </dl>
+                <dl class="dlist-align">
+                    <dt>Grand Total:</dt>
+                    <dd class="text-right text-dark"><strong>NPR {{ grand_total }}</strong></dd>
+                </dl>
+                <hr>
+
+                <!-- PAYMENT FORM -->
+                <form action="{% url 'payments' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="order_id" value="{{ order.id }}">
+
+                    <p class="text-center mb-3">
+                        <label>
+                            <input type="radio" name="payment_method" value="cod" required>
+                            <img src="{% static 'images/payments/cod.png' %}" height="52" alt="Cash on Delivery">
+                        </label>
+                        <label>
+                            <input type="radio" name="payment_method" value="esewa" required>
+                            <img src="{% static 'images/payments/esewa.png' %}" height="52" alt="eSewa">
+                        </label>
+                        <label>
+                            <input type="radio" name="payment_method" value="khalti" required>
+                            <img src="{% static 'images/payments/khalti.png' %}" height="52" alt="Khalti">
+                        </label>
+                    </p>
+
+                    <button type="submit" class="btn btn-primary btn-block">Make Payments</button>
+                </form>
+
+            </div>
+        </div>
+    </aside>
+</div>
+
+</div>
+</section>
+{% endblock %}

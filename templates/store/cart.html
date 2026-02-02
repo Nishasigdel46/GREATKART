@@ -101,8 +101,8 @@
                     <!-- PRICE -->
                     <td>
                         <div class="price-wrap">
-                            <var class="price">NPR {{ item.sub_total }}</var>
-                            <small class="text-muted">NPR </small>{{ item.product.price }} each</small>
+                        <var class="price">NPR {{ item.sub_total|floatformat:0 }}</var>
+                            <small class="text-muted">NPR {{ item.product.price }} each</small>
                         </div>
                     </td>
 
@@ -139,9 +139,11 @@
                     <dd class="text-right text-dark"><strong>NPR {{ grand_total }}</strong></dd>
                 </dl>
                 <hr>
-                <p class="text-center mb-3">
-                    <img src="{% static 'images/misc/payments.png' %}" height="26">
-                </p>
+<p class="text-center mb-3">
+    <img src="{% static 'images/payments/cod.png' %}" height="52" alt="Cash on Delivery">
+    <img src="{% static 'images/payments/esewa.png' %}" height="52" alt="eSewa">
+    <img src="{% static 'images/payments/Khalti.png' %}" height="52" alt="Khalti">
+</p>
                 <a href="{% url 'checkout' %}" class="btn btn-primary btn-block">Checkout</a>
                 <a href="{% url 'store' %}" class="btn btn-light btn-block">Continue Shopping</a>
             </div>

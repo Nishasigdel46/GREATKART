@@ -113,11 +113,8 @@ def signin(request):
 
 @login_required(login_url='login')
 def checkout(request):
-    try:
-        cart = Cart.objects.get(cart_id=_cart_id(request))
-        cart_items = CartItem.objects.filter(cart=cart)
-    except Cart.DoesNotExist:
-        cart_items = []
+
+    cart_items = CartItem.objects.filter(user=request.user, is_active=True)
 
     total = sum(item.product.price * item.quantity for item in cart_items)
     quantity = sum(item.quantity for item in cart_items)
