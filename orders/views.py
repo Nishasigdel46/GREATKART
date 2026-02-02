@@ -120,3 +120,16 @@ def order_complete(request, order_number):
         'order': order
     }
     return render(request, 'orders/order_complete.html', context)
+
+
+def user_dashboard(request):
+    current_user = request.user
+    orders = Order.objects.filter(user=current_user).order_by('-created_at')
+    
+    order_products = OrderProduct.objects.filter(order__in=orders)
+
+    context = {
+        'orders': orders,
+        'order_products': order_products,
+    }
+    return render(request, 'orders/dashboard.html', context)

@@ -19,15 +19,13 @@ def add_to_cart(request, product_id):
     if request.method == 'POST':
         for key, value in request.POST.items():
             if key != 'csrfmiddlewaretoken':
-                try:
-                    variation = Variation.objects.get(
-                        product=product,
-                        variation_category__iexact=key,
-                        variation_value__iexact=value
-                    )
+                variation = Variation.objects.filter(
+                    product=product,
+                    variation_category__iexact=key,
+                    variation_value__iexact=value
+                ).first()
+                if variation:
                     product_variation.append(variation)
-                except Variation.DoesNotExist:
-                    pass
 
     if request.user.is_authenticated:
         cart_items = CartItem.objects.filter(user=request.user, product=product, is_active=True)
